@@ -41,7 +41,7 @@ def custom_openapi():
 
     openapi_schema["servers"] = [
         {
-            "url": "https://{hostname}:{port}/api/v1",
+            "url": "https://{hostname}:{port}",
             "variables": {
                 "hostname": {
                     "default": "0.0.0.0",
