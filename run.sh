@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 CERTS_DIR="certs"
 KEY_FILE="$CERTS_DIR/key.pem"
@@ -9,7 +9,7 @@ SUBJ="/C=BR/ST=Brazil/L=Brazil/O=The Organization/CN=textgen.api"
 
 mkdir -p "$CERTS_DIR"
 
-if [[ ! -f "$KEY_FILE" || ! -f "$CERT_FILE" ]]; then
+if [ ! -f "$KEY_FILE" ] || [ ! -f "$CERT_FILE" ]; then
     echo "SSL key or certificate not found. Generating self-signed certificates..."
     openssl genpkey -algorithm RSA -out "$KEY_FILE"
     openssl req -new -key "$KEY_FILE" -out "$CSR_FILE" -subj "$SUBJ"
@@ -19,4 +19,4 @@ else
     echo "SSL key and certificate found in $CERTS_DIR."
 fi
 
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload --ssl-keyfile="$KEY_FILE" --ssl-certfile="$CERT_FILE"
+exec uvicorn main:app --host 0.0.0.0 --port 8000 --reload --ssl-keyfile="$KEY_FILE" --ssl-certfile="$CERT_FILE"
