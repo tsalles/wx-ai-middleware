@@ -12,4 +12,4 @@ RUN chmod +x run.sh
 
 EXPOSE 8000
 
-CMD ["./run.sh"]
+ENTRYPOINT ["sh", "./run.sh"]
