@@ -1,0 +1,35 @@
+
+
+ibmcloud ce project select -n <project_name>
+
+### Creating secrets
+
+  ibmcloud ce secret create --name wx-ai-middleware-secret \
+           --from-literal "WATSONX_APIKEY={YOUR_API_KEY}"  \
+           --from-literal "WATSONX_PROJECT_ID={YOUR_PROJECT_ID}"
+  ibmcloud ce configmap create --name wx-ai-middleware-configmap \
+           --from-literal "TLS_TERMINATION=false" \
+           --from-literal "WATSONX_MODEL={YOUR_MODEL_ID}" \
+           --from-literal "WATSONX_URL=https://us-south.ml.cloud.ibm.com"
+
+ Optional (if not, it will automatically use self signed cert generated at startup)
+
+  ibmcloud ce secret create --name wx-ai-middleware-certs --format tls --key-path /app/certs  --private-key-file <your_private_key_file>  --cert-chain-file <your_cert_chain_file>
+
+
+You can create the application manually at CE UI or via CLI:
+
+Building from source:
+
+ibmcloud ce application create --name wx-ai-middleware --port 8000 \
+                                --env-from-secret wx-ai-middleware-secret \
+                                --env-from-configmap wx-ai-middleware-configmap \
+                                --build-source .
+
+Creating from pre-built image:
+
+podman build . -t <my_repository>:<my_tag>
+
+podman tag <my_repository>:<my_tag> 
+
+
