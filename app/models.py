@@ -5,7 +5,7 @@ from datetime import datetime
 
 class ModerationSettings(BaseModel):
     enabled: bool
-    threshold: Optional[float] = Field(default=None, nullable=True)
+    threshold: float = Field(default=None, nullable=True)
 
 
 class MaskSettings(BaseModel):
@@ -18,10 +18,10 @@ class InputRanges(BaseModel):
 
 
 class Moderations(BaseModel):
-    hap: Optional[ModerationSettings] = Field(default=None, nullable=True)
-    pii: Optional[ModerationSettings] = Field(default=None, nullable=True)
-    input_ranges: Optional[InputRanges] = Field(default=None, nullable=True)
-    mask: Optional[MaskSettings] = Field(default=None, nullable=True)
+    hap: ModerationSettings = Field(default=None, nullable=True)
+    pii: ModerationSettings = Field(default=None, nullable=True)
+    input_ranges: InputRanges = Field(default=None, nullable=True)
+    mask: MaskSettings = Field(default=None, nullable=True)
 
 
 class LengthPenalty(BaseModel):
@@ -30,36 +30,36 @@ class LengthPenalty(BaseModel):
 
 
 class ReturnOptions(BaseModel):
-    input_text: Optional[bool] = Field(default=False, nullable=True)
-    generated_tokens: Optional[bool] = Field(default=False, nullable=True)
-    input_tokens: Optional[bool] = Field(default=False, nullable=True)
-    token_logprobs: Optional[bool] = Field(default=False, nullable=True)
-    token_ranks: Optional[bool] = Field(default=False, nullable=True)
-    top_n_tokens: Optional[int] = Field(default=0, nullable=True)
+    input_text: bool = Field(default=False, nullable=True)
+    generated_tokens: bool = Field(default=False, nullable=True)
+    input_tokens: bool = Field(default=False, nullable=True)
+    token_logprobs: bool = Field(default=False, nullable=True)
+    token_ranks: bool = Field(default=False, nullable=True)
+    top_n_tokens: int = Field(default=0, nullable=True)
 
 
 class Parameters(BaseModel):
-    decoding_method: Optional[str] = Field(default="greedy", nullable=True)
-    length_penalty: Optional[LengthPenalty] = Field(default=None, nullable=True)
-    time_limit: Optional[int] = Field(default=None, nullable=True)
-    temperature: Optional[float] = Field(default=None, nullable=True)
-    top_p: Optional[float] = Field(default=None, nullable=True)
-    top_k: Optional[int] = Field(default=None, nullable=True)
-    random_seed: Optional[int] = Field(default=None, nullable=True)
-    repetition_penalty: Optional[float] = Field(default=None, nullable=True)
-    min_new_tokens: Optional[int] = Field(default=None, nullable=True)
-    max_new_tokens: Optional[int] = Field(default=None, nullable=True)
-    stop_sequences: Optional[List[str]] = []
-    truncate_input_tokens: Optional[int] = Field(default=None, nullable=True)
-    include_stop_sequence: Optional[bool] = Field(default=None, nullable=True)
+    decoding_method: str = Field(default="greedy", nullable=True)
+    length_penalty: LengthPenalty = Field(default=None, nullable=True)
+    time_limit: int = Field(default=None, nullable=True)
+    temperature: float = Field(default=None, nullable=True)
+    top_p: float = Field(default=None, nullable=True)
+    top_k: int = Field(default=None, nullable=True)
+    random_seed: int = Field(default=None, nullable=True)
+    repetition_penalty: float = Field(default=None, nullable=True)
+    min_new_tokens: int = Field(default=None, nullable=True)
+    max_new_tokens: int = Field(default=None, nullable=True)
+    stop_sequences: List[str] = Field(default=None, nullable=True)
+    truncate_input_tokens: int = Field(default=None, nullable=True)
+    include_stop_sequence: bool = Field(default=None, nullable=True)
     return_options: Optional[ReturnOptions] = Field(default=None, nullable=True)
 
 
 class GenerateRequest(BaseModel):
     model_id: str = Field(default=None, nullable=True)
     input: str
-    moderations: Optional[Moderations] = Field(default=None, nullable=True)
-    parameters: Optional[Parameters] = Field(default=None, nullable=True)
+    moderations: Moderations = Field(default=None, nullable=True)
+    parameters: Parameters = Field(default=None, nullable=True)
     project_id: str = Field(default=None, nullable=True)
 
 
@@ -71,16 +71,16 @@ class ModerationEntry(BaseModel):
 
 
 class ModerationsOutput(BaseModel):
-    pii: Optional[List[ModerationEntry]] = Field(default=None, nullable=True)
-    hap: Optional[List[ModerationEntry]] = Field(default=None, nullable=True)
+    pii: List[ModerationEntry] = Field(default=None, nullable=True)
+    hap: List[ModerationEntry] = Field(default=None, nullable=True)
 
 
 class Result(BaseModel):
     generated_text: str
-    generated_token_count: Optional[int] = Field(default=None, nullable=True)
-    input_token_count: Optional[int] = Field(default=None, nullable=True)
-    stop_reason: Optional[str] = Field(default=None, nullable=True)
-    moderations: Optional[ModerationsOutput] = Field(default=None, nullable=True)
+    generated_token_count: int = Field(default=None, nullable=True)
+    input_token_count: int = Field(default=None, nullable=True)
+    stop_reason: str = Field(default=None, nullable=True)
+    moderations: ModerationsOutput = Field(default=None, nullable=True)
 
 
 class GenerateResponse(BaseModel):
