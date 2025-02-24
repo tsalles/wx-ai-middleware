@@ -43,6 +43,7 @@ model = ModelInference(
     summary="Generates Text using generative AI",
     description="Generates text using watsonx.ai service.",
     operation_id="generate_text_generate_post",
+    tags=["genai"],
 )
 def generate_text(request: GenerateRequest) -> GenerateResponse:
     params = request.parameters.dict(exclude_none=True) if request.parameters else {}

@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 from datetime import datetime
 
 
@@ -18,10 +18,10 @@ class InputRanges(BaseModel):
 
 
 class Moderations(BaseModel):
-    hap: ModerationSettings = Field(default=None, nullable=True)
-    pii: ModerationSettings = Field(default=None, nullable=True)
-    input_ranges: InputRanges = Field(default=None, nullable=True)
-    mask: MaskSettings = Field(default=None, nullable=True)
+    hap: ModerationSettings = None # Field(default=None, nullable=True)
+    pii: ModerationSettings = None # Field(default=None, nullable=True)
+    input_ranges: InputRanges = None # Field(default=None, nullable=True)
+    mask: MaskSettings = None # Field(default=None, nullable=True)
 
 
 class LengthPenalty(BaseModel):
@@ -40,7 +40,7 @@ class ReturnOptions(BaseModel):
 
 class Parameters(BaseModel):
     decoding_method: str = Field(default="greedy", nullable=True)
-    length_penalty: LengthPenalty = Field(default=None, nullable=True)
+    length_penalty: LengthPenalty = None # Field(default=None, nullable=True)
     time_limit: int = Field(default=None, nullable=True)
     temperature: float = Field(default=None, nullable=True)
     top_p: float = Field(default=None, nullable=True)
@@ -52,14 +52,14 @@ class Parameters(BaseModel):
     stop_sequences: List[str] = Field(default=None, nullable=True)
     truncate_input_tokens: int = Field(default=None, nullable=True)
     include_stop_sequence: bool = Field(default=None, nullable=True)
-    return_options: Optional[ReturnOptions] = Field(default=None, nullable=True)
+    return_options: ReturnOptions = None # Field(default=None, nullable=True)
 
 
 class GenerateRequest(BaseModel):
     model_id: str = Field(default=None, nullable=True)
     input: str
-    moderations: Moderations = Field(default=None, nullable=True)
-    parameters: Parameters = Field(default=None, nullable=True)
+    moderations: Moderations = None
+    parameters: Parameters = None
     project_id: str = Field(default=None, nullable=True)
 
 
@@ -71,8 +71,8 @@ class ModerationEntry(BaseModel):
 
 
 class ModerationsOutput(BaseModel):
-    pii: List[ModerationEntry] = Field(default=None, nullable=True)
-    hap: List[ModerationEntry] = Field(default=None, nullable=True)
+    pii: List[ModerationEntry] = None # Field(default=None, nullable=True)
+    hap: List[ModerationEntry] = None # Field(default=None, nullable=True)
 
 
 class Result(BaseModel):
@@ -80,7 +80,7 @@ class Result(BaseModel):
     generated_token_count: int = Field(default=None, nullable=True)
     input_token_count: int = Field(default=None, nullable=True)
     stop_reason: str = Field(default=None, nullable=True)
-    moderations: ModerationsOutput = Field(default=None, nullable=True)
+    moderations: ModerationsOutput = None
 
 
 class GenerateResponse(BaseModel):

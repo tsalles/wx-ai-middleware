@@ -28,6 +28,11 @@ def custom_openapi():
     openapi_schema["info"]["x-ibm-skill-type"]: str = "imported"
     openapi_schema["info"]["x-ibm-skill-subtype"]: str = "public"
 
+    openapi_schema["tags"] = [{
+        "name": "genai",
+        "description": "Generative AI operations"
+    }]
+
     if "components" not in openapi_schema:
         openapi_schema["components"] = {}
 
