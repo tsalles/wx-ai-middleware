@@ -1,4 +1,25 @@
+CLI login
+ibmcloud login [--sso]
 
+Then, select your target account number.
+
+Select your target resource group:
+ibmcloud target -g '{your resource group name}'
+
+Login into your Container Registry:
+ibmcloud cr login
+
+Then set your target region (e.g., us-south)
+ibmcloud cr region-set {target region}
+
+Building docker image:
+podman build . -t wx-ai-middleware
+
+Tagging it. Please substitute with your desired (and previously created) namespace
+podman tag localhost/wx-ai-middleware:latest us.icr.io/{your namespace}/wx-ai-middleware:1.0.0
+
+Pushing it to CR
+podman push us.icr.io/{your namespace}/wx-ai-middleware:1.0.0
 
 ibmcloud ce project select -n <project_name>
 
