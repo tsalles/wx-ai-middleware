@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from fastapi.openapi.models import APIKey
 from fastapi.openapi.utils import get_openapi
-from app.routes import router
+from fastapi.responses import JSONResponse
+from app.routes import router, model
 
 
 app = FastAPI(
@@ -76,3 +77,23 @@ def custom_swagger_ui():
     from fastapi.openapi.docs import get_swagger_ui_html
 
     return get_swagger_ui_html(openapi_url="/openapi.json", title=app.title)
+
+@app.get("/health/liveness", include_in_schema=False)
+async def liveness_probe():
+    return JSONResponse(
+        content={"status": "alive"},
+        status_code=status.HTTP_200_OK,
+    )
+
+@app.get("/health/readiness", include_in_schema=False)
+async def readiness_probe():
+    if model is not None:
+        return JSONResponse(
+            content={"status": "ready"},
+            status_code=status.HTTP_200_OK,
+        )
+    else:
+        return JSONResponse(
+            content={"status": "not ready"},
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
