@@ -58,7 +58,7 @@ def custom_openapi():
         {
             "url": "{schema}://{hostname}:{port}",
             "variables": {
-                "schema": {"default": http_schema, "description": "Protocol: HTTP or HTTPS"}
+                "schema": {"default": http_schema, "description": "Protocol: HTTP or HTTPS"},
                 "hostname": {"default": "0.0.0.0", "description": "Service hostname"},
                 "port": {"default": "8000", "description": "Service port"},
             },
