@@ -59,8 +59,8 @@ def generate_text(request: GenerateRequest) -> GenerateResponse:
     "/generate",
     response_model=GenerateResponseSimple,
     dependencies=[Depends(get_api_key)],
-    summary="Generates Text using generative AI",
-    description="Generates text using watsonx.ai service.",
+    summary="[Simple] Generates Text using generative AI",
+    description="[Simple] Generates text using a simplified API from watsonx.ai service.",
     operation_id="generate_text_simple_generate_post",
     tags=["genai"],
 )

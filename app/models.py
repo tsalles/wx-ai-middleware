@@ -94,7 +94,7 @@ class GenerateResponse(BaseModel):
 class GenerateRequestSimple(BaseModel):
     model_id: str = Field(default=os.getenv('WATSONX_MODEL'), nullable=True)
     input: str
-    decoding_method: Optional[Literal["greedy", "sample"]] = "greedy"
+    decoding_method: Literal["greedy", "sample"] = "greedy"
     temperature: float = Field(default=None, nullable=True)
     top_p: float = Field(default=1.0, nullable=True)
     top_k: int = Field(default=50, nullable=True)
