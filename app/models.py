@@ -98,6 +98,8 @@ class GenerateRequestSimple(BaseModel):
     temperature: float = Field(default=None, nullable=True)
     top_p: float = Field(default=1.0, nullable=True)
     top_k: int = Field(default=50, nullable=True)
+    min_new_tokens: int = Field(default=None, nullable=True)
+    max_new_tokens: int = Field(default=None, nullable=True)
     stop_sequences: List[str] = Field(default=None, nullable=True)
     project_id: str = Field(default=os.getenv('WATSONX_PROJECT_ID'), nullable=True)
 
