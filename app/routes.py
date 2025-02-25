@@ -70,6 +70,8 @@ def generate(request: GenerateRequestSimple) -> GenerateResponseSimple:
         'temperature': request.temperature,
         'top_p': request.top_p,
         'top_k': request.top_k,
+        'min_new_tokens': request.min_new_tokens,
+        'max_new_tokens': request.max_new_tokens,
         'stop_sequences': request.stop_sequences,
         'project_id': request.project_id,
         'model_id': request.model_id
