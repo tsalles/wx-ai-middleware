@@ -4,6 +4,12 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 from app.routes import router, model
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
+import os
+
 
 app = FastAPI(
     title="Text Generation API",
@@ -29,10 +35,9 @@ def custom_openapi():
     openapi_schema["info"]["x-ibm-skill-type"]: str = "imported"
     openapi_schema["info"]["x-ibm-skill-subtype"]: str = "public"
 
-    openapi_schema["tags"] = [{
-        "name": "genai",
-        "description": "Generative AI operations"
-    }]
+    openapi_schema["tags"] = [
+        {"name": "genai", "description": "Generative AI operations"}
+    ]
 
     if "components" not in openapi_schema:
         openapi_schema["components"] = {}
@@ -48,9 +53,10 @@ def custom_openapi():
 
     openapi_schema["security"] = [{"ApiKeyAuth": []}]
 
+    http_schema = "http" if os.getenv("TLS_TERMINATION", "false") == "false" else "https"
     openapi_schema["servers"] = [
         {
-            "url": "https://{hostname}:{port}",
+            "url": http_schema + "://{hostname}:{port}",
             "variables": {
                 "hostname": {"default": "0.0.0.0", "description": "Service hostname"},
                 "port": {"default": "8000", "description": "Service port"},
@@ -78,12 +84,14 @@ def custom_swagger_ui():
 
     return get_swagger_ui_html(openapi_url="/openapi.json", title=app.title)
 
+
 @app.get("/health/liveness", include_in_schema=False)
 async def liveness_probe():
     return JSONResponse(
         content={"status": "alive"},
         status_code=status.HTTP_200_OK,
     )
+
 
 @app.get("/health/readiness", include_in_schema=False)
 async def readiness_probe():

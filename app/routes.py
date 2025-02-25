@@ -3,6 +3,8 @@ import os
 from fastapi import APIRouter, HTTPException, Depends
 
 from app.models import GenerateRequest, GenerateResponse
+from app.models import GenerateRequestSimple, GenerateResponseSimple
+
 from app.auth import get_api_key
 
 import json
@@ -37,7 +39,7 @@ model = ModelInference(
 
 
 @router.post(
-    "/generate",
+    "/generate_text",
     response_model=GenerateResponse,
     dependencies=[Depends(get_api_key)],
     summary="Generates Text using generative AI",
@@ -49,5 +51,34 @@ def generate_text(request: GenerateRequest) -> GenerateResponse:
     params = request.parameters.dict(exclude_none=True) if request.parameters else {}
     try:
         return model.generate(prompt=request.input, params=params)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post(
+    "/generate",
+    response_model=GenerateResponseSimple,
+    dependencies=[Depends(get_api_key)],
+    summary="Generates Text using generative AI",
+    description="Generates text using watsonx.ai service.",
+    operation_id="generate_text_simple_generate_post",
+    tags=["genai"],
+)
+def generate(request: GenerateRequestSimple) -> GenerateResponseSimple:
+    params = {
+        'decoding_method': request.decoding_method,
+        'temperature': request.temperature,
+        'top_p': request.top_p,
+        'top_k': request.top_k,
+        'stop_sequences': request.stop_sequences,
+        'project_id': request.project_id,
+        'model_id': request.model_id
+    }
+    try:
+        data = '\n'.join([r['generated_text'].strip()
+                          for r in model.generate(prompt=request.input, params=params)['results']])
+        return GenerateResponseSimple(
+            generated_text=data
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

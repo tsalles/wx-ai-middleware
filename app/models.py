@@ -1,5 +1,7 @@
+import os
+
 from pydantic import BaseModel, Field
-from typing import Dict, Any, List, Optional, Union
+from typing import Dict, Any, List, Optional, Union, Literal
 from datetime import datetime
 
 
@@ -18,10 +20,10 @@ class InputRanges(BaseModel):
 
 
 class Moderations(BaseModel):
-    hap: ModerationSettings = None # Field(default=None, nullable=True)
-    pii: ModerationSettings = None # Field(default=None, nullable=True)
-    input_ranges: InputRanges = None # Field(default=None, nullable=True)
-    mask: MaskSettings = None # Field(default=None, nullable=True)
+    hap: ModerationSettings = None  # Field(default=None, nullable=True)
+    pii: ModerationSettings = None  # Field(default=None, nullable=True)
+    input_ranges: InputRanges = None  # Field(default=None, nullable=True)
+    mask: MaskSettings = None  # Field(default=None, nullable=True)
 
 
 class LengthPenalty(BaseModel):
@@ -40,7 +42,7 @@ class ReturnOptions(BaseModel):
 
 class Parameters(BaseModel):
     decoding_method: str = Field(default="greedy", nullable=True)
-    length_penalty: LengthPenalty = None # Field(default=None, nullable=True)
+    length_penalty: LengthPenalty = None  # Field(default=None, nullable=True)
     time_limit: int = Field(default=None, nullable=True)
     temperature: float = Field(default=None, nullable=True)
     top_p: float = Field(default=None, nullable=True)
@@ -52,7 +54,7 @@ class Parameters(BaseModel):
     stop_sequences: List[str] = Field(default=None, nullable=True)
     truncate_input_tokens: int = Field(default=None, nullable=True)
     include_stop_sequence: bool = Field(default=None, nullable=True)
-    return_options: ReturnOptions = None # Field(default=None, nullable=True)
+    return_options: ReturnOptions = None  # Field(default=None, nullable=True)
 
 
 class GenerateRequest(BaseModel):
@@ -71,8 +73,8 @@ class ModerationEntry(BaseModel):
 
 
 class ModerationsOutput(BaseModel):
-    pii: List[ModerationEntry] = None # Field(default=None, nullable=True)
-    hap: List[ModerationEntry] = None # Field(default=None, nullable=True)
+    pii: List[ModerationEntry] = None  # Field(default=None, nullable=True)
+    hap: List[ModerationEntry] = None  # Field(default=None, nullable=True)
 
 
 class Result(BaseModel):
@@ -87,3 +89,18 @@ class GenerateResponse(BaseModel):
     model_id: str
     created_at: datetime
     results: List[Result]
+
+
+class GenerateRequestSimple(BaseModel):
+    model_id: str = Field(default=os.getenv('WATSONX_MODEL'), nullable=True)
+    input: str
+    decoding_method: Optional[Literal["greedy", "sample"]] = "greedy"
+    temperature: float = Field(default=None, nullable=True)
+    top_p: float = Field(default=1.0, nullable=True)
+    top_k: int = Field(default=50, nullable=True)
+    stop_sequences: List[str] = Field(default=None, nullable=True)
+    project_id: str = Field(default=os.getenv('WATSONX_PROJECT_ID'), nullable=True)
+
+
+class GenerateResponseSimple(BaseModel):
+    generated_text: str
